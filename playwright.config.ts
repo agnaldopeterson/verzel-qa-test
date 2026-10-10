@@ -1,26 +1,21 @@
 import { defineConfig, devices } from '@playwright/test';
 
+// A URL pode ser trocada por variável de ambiente (útil para testes locais):
+//   BASE_URL=http://localhost:3999 npx playwright test
+const baseURL =
+  process.env.BASE_URL ?? 'https://verzel-store.qa-test-verzel-store.workers.dev';
+
 export default defineConfig({
   testDir: './tests',
-  timeout: 30 * 1000,
+  timeout: 30_000,
   retries: 0,
-  reporter: [['html', { open: 'never' }], ['list'] ],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  reporter: [['html', { open: 'never' }], ['list']],
   use: {
-    /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: 'https://verzel-store.qa-test-verzel-store.workers.dev',
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    baseURL,
+    extraHTTPHeaders: { 'Content-Type': 'application/json' },
+    trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
   },
-
-  /* Configure projects for major browsers */
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    }    
-  ],
-
+  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
 });
