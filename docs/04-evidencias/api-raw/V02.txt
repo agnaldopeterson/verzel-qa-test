@@ -1,0 +1,15 @@
+HTTP/1.1 400 Bad Request
+Date: Fri, 09 Oct 2026 17:52:07 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 105
+Connection: close
+Access-Control-Allow-Origin: *
+access-control-allow-headers: content-type
+access-control-allow-methods: GET, POST, OPTIONS
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=Feuc67VE6NedV2Cgid4Vx7pzJT5Lv4h9h0tc7BXjZAdOwqmsjc9J1%2F0HbTLzRtLx8VpHm7gC7XdaWElWQLxGKcglVqD%2FhL37qGRHMH5jJPRSssbAidLKBA2KMgox5tYCndUPFDi5oF0EVkBpGylwbZhgCJSFOm06u6P1mH7V5bI%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Server: cloudflare
+CF-RAY: a47f3cbf0d7cf21b-GRU
+alt-svc: h3=":443"; ma=86400
+
+{"erro":{"codigo":"JSON_INVALIDO","mensagem":"O corpo da requisição deve ser um objeto JSON válido."}}

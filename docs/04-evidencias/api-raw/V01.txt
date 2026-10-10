@@ -1,0 +1,15 @@
+HTTP/1.1 422 Unprocessable Entity
+Date: Fri, 09 Oct 2026 17:51:28 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 118
+Connection: close
+Access-Control-Allow-Origin: *
+access-control-allow-headers: content-type
+access-control-allow-methods: GET, POST, OPTIONS
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=4Hw6Ge9YAXVbT1eQciM2x%2BVIi7prHEybhTUCKOfJM2F68TI8sgJheEJmCdHXQ5Dhre70PZvs%2BzhGOooeYIB%2Bl21iG5ul1Ze0tWuOe9L2OvvzBTAfUyWZ8aKbd9XHuQBI%2FsMrEZzViV1RmCLTn2Il7EOUUBzLl5JyNBiO3bTwXQI%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Server: cloudflare
+CF-RAY: a47f3bcdbd78f25c-GRU
+alt-svc: h3=":443"; ma=86400
+
+{"erro":{"codigo":"ITEM_DUPLICADO","mensagem":"O produto P001 aparece mais de uma vez.","campo":"itens[1].produtoId"}}

@@ -1,0 +1,317 @@
+@base = https://verzel-store.qa-test-verzel-store.workers.dev/api
+
+# =====================================================================
+# Verzel Store - API: conjunto  (24 casos)
+#
+# Preços: P001=59.9 P002=139.9 P003=189.9 P004=49.9
+#         P005=100  P006=29.9  P007=229.9 P008=50
+# Cupons: BEMVINDO10 (10%, válido) | VERAO2026 (15%, expirado)
+# =====================================================================
+
+# ---------------------------------------------------------------------
+# CATÁLOGO
+# ---------------------------------------------------------------------
+
+### 00.1 Lista 8 produtos (P001..P008) com preços da documentação
+# Esperado: 200, array com 8 itens
+GET {{base}}/produtos
+
+
+# ---------------------------------------------------------------------
+# CA01 - 10% de desconto
+# ---------------------------------------------------------------------
+
+### CA01.1 Exemplo da documentação
+# Esperado: 200 | subtotal 239.7 | desconto 23.97 | frete 0 | freteGratis true
+#           faltante 0 | total 215.73 | cupom.aplicado true
+#           mensagem "Cupom aplicado: 10% de desconto nos produtos."
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [
+    { "produtoId": "P002", "quantidade": 1 },
+    { "produtoId": "P004", "quantidade": 2 }
+  ],
+  "cupom": "BEMVINDO10"
+}
+
+### CA01.2 Um item de R$ 100
+# Esperado: subtotal 100 | desconto 10 | frete 19.9 | faltante 100 | total 109.9
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [{ "produtoId": "P005", "quantidade": 1 }],
+  "cupom": "BEMVINDO10"
+}
+
+
+# ---------------------------------------------------------------------
+# CA02 - Maiúsculas/minúsculas e espaços
+# ---------------------------------------------------------------------
+
+### CA02.1 Minúsculo
+# Esperado: aplicado true | desconto 10
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [{ "produtoId": "P005", "quantidade": 1 }],
+  "cupom": "bemvindo10"
+}
+
+### CA02.2 Espaços no início e no fim
+# Esperado: aplicado true | desconto 10
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [{ "produtoId": "P005", "quantidade": 1 }],
+  "cupom": "   BEMVINDO10   "
+}
+
+
+# ---------------------------------------------------------------------
+# CA03 / CA04 - Cupom inexistente e expirado
+# ---------------------------------------------------------------------
+
+### CA03.1 Cupom inexistente no cálculo
+# Esperado: 200 | desconto 0 | aplicado false | mensagem "Cupom inválido." | total 119.9
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [{ "produtoId": "P005", "quantidade": 1 }],
+  "cupom": "NAOEXISTE"
+}
+
+### CA04.1 Cupom expirado no cálculo
+# Esperado: 200 | desconto 0 | aplicado false | mensagem "Cupom expirado." | total 119.9
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [{ "produtoId": "P005", "quantidade": 1 }],
+  "cupom": "VERAO2026"
+}
+
+
+# ---------------------------------------------------------------------
+# CA05 - Um cupom por vez (exploratório; a regra completa é de interface)
+# ---------------------------------------------------------------------
+
+### CA05.1 Dois cupons em array (exploratório)
+# Esperado: não acumular descontos (nenhum 25%). Registrar o comportamento.
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [{ "produtoId": "P005", "quantidade": 1 }],
+  "cupom": ["BEMVINDO10", "VERAO2026"]
+}
+
+
+# ---------------------------------------------------------------------
+# CA06 / CA07 - Valores-limite do frete grátis
+# ---------------------------------------------------------------------
+
+### CA06.1 Exatamente R$ 200,00 (P005 x2)
+# Esperado: subtotal 200 | frete 0 | freteGratis true | faltante 0 | total 200
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [{ "produtoId": "P005", "quantidade": 2 }]
+}
+
+### CA07.1 R$ 199,80 (abaixo do limite)
+# Esperado: subtotal 199.8 | frete 19.9 | freteGratis false
+#           faltante 0.2 | total 219.7
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [
+    { "produtoId": "P002", "quantidade": 1 },
+    { "produtoId": "P001", "quantidade": 1 }
+  ]
+}
+
+
+# ---------------------------------------------------------------------
+# CA08 - Frete considera o subtotal antes do cupom
+# ---------------------------------------------------------------------
+
+### CA08.1 Subtotal = 200 + cupom
+# Esperado: desconto 20 | frete 0 | freteGratis false | total 199.9 
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [{ "produtoId": "P005", "quantidade": 2 }],
+  "cupom": "BEMVINDO10"
+}
+
+### CA08.2 Subtotal 199,80 + cupom: NÃO ganha frete grátis
+# Esperado: desconto 19.98 | frete 19.9 | faltante 0.2 | total 199.72
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [
+    { "produtoId": "P002", "quantidade": 1 },
+    { "produtoId": "P001", "quantidade": 1 }
+  ],
+  "cupom": "BEMVINDO10"
+}
+
+
+# ---------------------------------------------------------------------
+# CA09 - Desconto não incide no frete
+# ---------------------------------------------------------------------
+
+### CA09.1 Carrinho com frete cobrado + cupom
+# Esperado: desconto = 10 (10% de 100), NÃO 11.99 (10% de 119.90)
+#           total 109.9
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [{ "produtoId": "P005", "quantidade": 1 }],
+  "cupom": "BEMVINDO10"
+}
+
+
+# ---------------------------------------------------------------------
+# CA10 - Limite de 5 unidades
+# ---------------------------------------------------------------------
+
+### CA10.1 Quantidade 5 (limite aceito)
+# Esperado: 200 | subtotal 299.5
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [{ "produtoId": "P001", "quantidade": 5 }]
+}
+
+### CA10.2 Quantidade 6 no cálculo
+# Esperado: 422 | erro.codigo = QUANTIDADE_MAXIMA_EXCEDIDA
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [{ "produtoId": "P001", "quantidade": 6 }]
+}
+
+
+# ---------------------------------------------------------------------
+# CA11 - Arredondamento / ponto flutuante
+# ---------------------------------------------------------------------
+
+### CA11.1 P001 x3 sem cupom (risco de float no subtotal e no faltante)
+# Esperado: subtotal 179.7 | frete 19.9 | faltante 20.3 | total 199.6
+# Bug se aparecer algo como 179.70000000000002 ou 20.299999999999983
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [{ "produtoId": "P001", "quantidade": 3 }]
+}
+
+### CA11.2 Faltante com float (P002 + P001 = 199.8, faltante 0.2)
+# Esperado: valorFaltanteFreteGratis exatamente 0.2
+# Bug se vier 0.1999999999999886
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [
+    { "produtoId": "P002", "quantidade": 1 },
+    { "produtoId": "P001", "quantidade": 1 }
+  ]
+}
+
+
+# ---------------------------------------------------------------------
+# PEDIDOS
+# ---------------------------------------------------------------------
+
+### P.1 Pedido válido (exemplo da documentação)
+# Esperado: 201 | numero VZ-000000 | subtotal 100 | desconto 10 | frete 19.9
+#           faltante 100 | total 109.9 | cliente.cep "01310100"
+POST {{base}}/pedidos
+Content-Type: application/json
+
+{
+  "cliente": { "nome": "Maria Silva", "email": "maria@exemplo.com", "cep": "01310-100" },
+  "itens": [{ "produtoId": "P005", "quantidade": 1 }],
+  "cupom": "BEMVINDO10"
+}
+
+### CA03.7 Pedido com cupom inexistente
+# Esperado: 422 | erro.codigo = CUPOM_INVALIDO
+POST {{base}}/pedidos
+Content-Type: application/json
+
+{
+  "cliente": { "nome": "Maria Silva", "email": "maria@exemplo.com", "cep": "01310-100" },
+  "itens": [{ "produtoId": "P005", "quantidade": 1 }],
+  "cupom": "NAOEXISTE"
+}
+
+### CA04.2 Pedido com cupom expirado
+# Esperado: 422 | erro.codigo = CUPOM_EXPIRADO
+POST {{base}}/pedidos
+Content-Type: application/json
+
+{
+  "cliente": { "nome": "Maria Silva", "email": "maria@exemplo.com", "cep": "01310-100" },
+  "itens": [{ "produtoId": "P005", "quantidade": 1 }],
+  "cupom": "VERAO2026"
+}
+
+### P.5 Nome sem sobrenome
+# Esperado: 422 | DADOS_INVALIDOS (campo nome em "campos")
+POST {{base}}/pedidos
+Content-Type: application/json
+
+{
+  "cliente": { "nome": "Maria", "email": "maria@exemplo.com", "cep": "01310100" },
+  "itens": [{ "produtoId": "P005", "quantidade": 1 }]
+}
+
+### P.6 CEP com 7 dígitos
+# Esperado: 422 | DADOS_INVALIDOS
+POST {{base}}/pedidos
+Content-Type: application/json
+
+{
+  "cliente": { "nome": "Maria Silva", "email": "maria@exemplo.com", "cep": "0131010" },
+  "itens": [{ "produtoId": "P005", "quantidade": 1 }]
+}
+
+
+# ---------------------------------------------------------------------
+# VALIDAÇÃO E PROTOCOLO
+# ---------------------------------------------------------------------
+
+### V.5 Produto duplicado
+# Esperado: 422 | ITEM_DUPLICADO
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{
+  "itens": [
+    { "produtoId": "P001", "quantidade": 1 },
+    { "produtoId": "P001", "quantidade": 2 }
+  ]
+}
+
+### E.1 JSON inválido
+# Esperado: 400 | JSON_INVALIDO
+POST {{base}}/carrinho/calcular
+Content-Type: application/json
+
+{abc

@@ -1,0 +1,16 @@
+HTTP/1.1 200 OK
+Date: Fri, 09 Oct 2026 17:41:39 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: close
+Access-Control-Allow-Origin: *
+access-control-allow-headers: content-type
+access-control-allow-methods: GET, POST, OPTIONS
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=%2BhxxTKVgwuiG1DE4xDRIBJVc6ZSZUXqQ1gzsI02VunLxDaT0gudVPI6aYSPsBQ7RL3rSorio1s57T38j2pl%2BUMZ1k%2Bv%2FSRkptEtTK8R2sJHAVM%2F2mnhmAKSVw9x9ML5adTklgJi98%2FjjZwyGmVs%2FlDbsh7A64IjHiPRL56vP72s%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Content-Encoding: gzip
+Server: cloudflare
+CF-RAY: a47f2d6add02920d-GRU
+alt-svc: h3=":443"; ma=86400
+
+{"itens":[{"produtoId":"P002","nome":"Calça Jeans Slim","precoUnitario":139.9,"quantidade":1,"total":139.9},{"produtoId":"P001","nome":"Camiseta Essencial","precoUnitario":59.9,"quantidade":1,"total":59.9}],"subtotal":199.8,"desconto":19.98,"frete":19.9,"freteGratis":false,"valorFaltanteFreteGratis":0.2,"total":199.72,"cupom":{"codigo":"BEMVINDO10","aplicado":true,"mensagem":"Cupom aplicado: 10% de desconto nos produtos."}}

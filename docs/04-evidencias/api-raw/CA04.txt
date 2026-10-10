@@ -1,0 +1,16 @@
+HTTP/1.1 200 OK
+Date: Fri, 09 Oct 2026 16:05:54 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: close
+Access-Control-Allow-Origin: *
+access-control-allow-headers: content-type
+access-control-allow-methods: GET, POST, OPTIONS
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=EMbgYJUZbw5V%2B1Dy45CyhK%2Fu%2Fk3tyxoC3aXx0m3z%2Fa5AbD31mihybVN%2BADRExM1h1lqpgsNvutWtAwNbgJWbKckKrkjkhADXnrfidoM70%2BU5HdXmUnOPDTHiTH7LN9m8Cx8rcLncC5iOvM3IYhcp5EUsCVN27RdD9SFQTI9lPkM%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Content-Encoding: gzip
+Server: cloudflare
+CF-RAY: a47ea128694e1aad-GRU
+alt-svc: h3=":443"; ma=86400
+
+{"itens":[{"produtoId":"P005","nome":"Mochila Urbana 20L","precoUnitario":100,"quantidade":1,"total":100}],"subtotal":100,"desconto":0,"frete":19.9,"freteGratis":false,"valorFaltanteFreteGratis":100,"total":119.9,"cupom":{"codigo":"VERAO2026","aplicado":false,"mensagem":"Cupom expirado."}}

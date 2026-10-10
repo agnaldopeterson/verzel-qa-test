@@ -1,0 +1,16 @@
+HTTP/1.1 200 OK
+Date: Fri, 09 Oct 2026 16:06:43 GMT
+Content-Type: application/json; charset=utf-8
+Transfer-Encoding: chunked
+Connection: close
+Access-Control-Allow-Origin: *
+access-control-allow-headers: content-type
+access-control-allow-methods: GET, POST, OPTIONS
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=LZWsMBq02fHVtAlz%2BzjxMDqqWVy6F19HxyBa6T10KKhymZ7cJJ10Ig%2FdGZ23AlDYblUScSuHm%2F%2FbLiLFrM6HYxwkLOFJGT4rSsiRMDJmSt%2F4sMin1H69q7T%2FEku%2BMSgQI6QJsBNYguLRwjHw3kMfZXdyn8FEqkKmk0qkiIxHDXg%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Content-Encoding: gzip
+Server: cloudflare
+CF-RAY: a47ea257ea1af171-GRU
+alt-svc: h3=":443"; ma=86400
+
+{"itens":[{"produtoId":"P005","nome":"Mochila Urbana 20L","precoUnitario":100,"quantidade":1,"total":100}],"subtotal":100,"desconto":0,"frete":19.9,"freteGratis":false,"valorFaltanteFreteGratis":100,"total":119.9,"cupom":{"codigo":"BEMVINDO10,VERAO2026","aplicado":false,"mensagem":"Cupom inválido."}}

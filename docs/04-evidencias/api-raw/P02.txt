@@ -1,0 +1,15 @@
+HTTP/1.1 422 Unprocessable Entity
+Date: Fri, 09 Oct 2026 17:48:52 GMT
+Content-Type: application/json; charset=utf-8
+Content-Length: 82
+Connection: close
+Access-Control-Allow-Origin: *
+access-control-allow-headers: content-type
+access-control-allow-methods: GET, POST, OPTIONS
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=fTPPrLhRMLAmBJMnDxIqJgG5r1JpYi5oPlS%2FL7%2FnnSDTHpdNvJo%2Fxr6RWVEnIYzrlPquuLBk0%2BoHJwzE%2F6MzznkP%2FQoacX7LpStjQ7esHP3MJNfdIE2MJz7zim%2FLD0ZO6bbD9Nq2kUZC6exerM3n4BZ0KlcUsHG5m0fMqgfw4yE%3D"}]}
+Nel: {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+Server: cloudflare
+CF-RAY: a47f37fcdfc8a67d-GRU
+alt-svc: h3=":443"; ma=86400
+
+{"erro":{"codigo":"CUPOM_INVALIDO","mensagem":"Cupom inválido.","campo":"cupom"}}
